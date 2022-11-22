@@ -7,5 +7,8 @@ CREATE TABLE guild (
 CREATE TABLE "user" (
     userID VARCHAR NOT NULL PRIMARY KEY,
     accentColour VARCHAR(100),
-    language VARCHAR(100)
+    language VARCHAR(100),
+    pointsGuildID VARCHAR[],
+    pointsMessages INTEGER[],
+    pointsVoiceChat INTEGER[]
 );

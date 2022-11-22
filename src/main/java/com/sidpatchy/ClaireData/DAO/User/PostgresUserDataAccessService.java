@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Array;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,46 +29,61 @@ public class PostgresUserDataAccessService implements UserDAO{
                 "VALUES (?, ?, ?)";
         return jdbcTemplate.update(
                 sql,
-                user.getUserID(),
                 user.getAccentColour(),
-                user.getLanguage()
+                user.getLanguage(),
+                user.getUserID(),
+                user.getPointsGuildID(),
+                user.getPointsMessages(),
+                user.getPointsVoiceChat()
         );
     }
 
     @Override
     public List<User> selectAllUsers() {
-        final String sql = "SELECT userid, accentcolour, language FROM \"user\"";
+        final String sql = "SELECT userid, accentcolour, language, pointsGuildID, pointsMessages, pointsVoiceChat FROM \"user\"";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             String id = resultSet.getString("userid");
             String accentColour = resultSet.getString("accentColour");
             String language = resultSet.getString("language");
+            Array pointsGuildID = resultSet.getArray("pointsGuildID");
+            Array pointsMessages = resultSet.getArray("pointsMessages");
+            Array pointsVoiceChat = resultSet.getArray("pointsVoiceChat");
 
             return new User(
                     id,
                     accentColour,
-                    language
+                    language,
+                    pointsGuildID,
+                    pointsMessages,
+                    pointsVoiceChat
             );
         });
     }
 
     @Override
     public Optional<User> selectUserByID(String userID) {
-        final String sql = "SELECT userid, accentcolour, language FROM \"user\" WHERE userid = ?";
+        final String sql = "SELECT userid, accentcolour, language, pointsGuildID, pointsMessages, pointsVoiceChat FROM \"user\" WHERE userid = ?";
 
         User user = jdbcTemplate.queryForObject(sql, new Object[]{userID}, (resultSet, i) -> {
             String id = resultSet.getString("userid");
             String accentColour = resultSet.getString("accentColour");
             String language = resultSet.getString("language");
+            Array pointsGuildID = resultSet.getArray("pointsGuildID");
+            Array pointsMessages = resultSet.getArray("pointsMessages");
+            Array pointsVoiceChat = resultSet.getArray("pointsVoiceChat");
 
             return new User(
                     id,
                     accentColour,
-                    language
+                    language,
+                    pointsGuildID,
+                    pointsMessages,
+                    pointsVoiceChat
             );
         });
         return Optional.ofNullable(user);
     }
-    //https://github.com/amigoscode/spring-boot-react-fullstack/blob/master/src/main/java/com/amigoscode/demo/student/StudentDataAccessService.java
+
     @Override
     public int updateUserByID(String userID, User user) {
         String sql = "" +
@@ -78,7 +94,10 @@ public class PostgresUserDataAccessService implements UserDAO{
         return jdbcTemplate.update(sql,
                 user.getAccentColour(),
                 user.getLanguage(),
-                user.getUserID());
+                user.getUserID(),
+                user.getPointsGuildID(),
+                user.getPointsMessages(),
+                user.getPointsVoiceChat());
     }
 
     @Override

@@ -1,11 +1,6 @@
 app:
   datasource:
-    jdbc-url: jdbc:postgresql://localhost:5432/clairedb
+    jdbc-url: jdbc:postgresql://127.0.0.1:5432/clairedb
     username: postgres
-    password: examplePassword
+    password: examplePassowrd
     pool-size: 30
-spring:
-  security:
-    user:
-      name: clairedata
-      password: examplePassword
