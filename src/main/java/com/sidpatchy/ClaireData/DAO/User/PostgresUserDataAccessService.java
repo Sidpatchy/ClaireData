@@ -25,13 +25,16 @@ public class PostgresUserDataAccessService implements UserDAO{
                 "INSERT INTO \"user\" (" +
                 "userID, " +
                 "accentColour, " +
-                "language) " +
-                "VALUES (?, ?, ?)";
+                "language, " +
+                "pointsGuildID, " +
+                "pointsMessages, " +
+                "pointsVoiceChat) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
         return jdbcTemplate.update(
                 sql,
+                user.getUserID(),
                 user.getAccentColour(),
                 user.getLanguage(),
-                user.getUserID(),
                 user.getPointsGuildID(),
                 user.getPointsMessages(),
                 user.getPointsVoiceChat()
@@ -45,9 +48,9 @@ public class PostgresUserDataAccessService implements UserDAO{
             String id = resultSet.getString("userid");
             String accentColour = resultSet.getString("accentColour");
             String language = resultSet.getString("language");
-            Array pointsGuildID = resultSet.getArray("pointsGuildID");
-            Array pointsMessages = resultSet.getArray("pointsMessages");
-            Array pointsVoiceChat = resultSet.getArray("pointsVoiceChat");
+            String[] pointsGuildID = (String[]) resultSet.getArray("pointsGuildID").getArray();
+            Integer[] pointsMessages = (Integer[]) resultSet.getArray("pointsMessages").getArray();
+            Integer[] pointsVoiceChat = (Integer[]) resultSet.getArray("pointsVoiceChat").getArray();
 
             return new User(
                     id,
@@ -60,6 +63,7 @@ public class PostgresUserDataAccessService implements UserDAO{
         });
     }
 
+
     @Override
     public Optional<User> selectUserByID(String userID) {
         final String sql = "SELECT userid, accentcolour, language, pointsGuildID, pointsMessages, pointsVoiceChat FROM \"user\" WHERE userid = ?";
@@ -68,9 +72,9 @@ public class PostgresUserDataAccessService implements UserDAO{
             String id = resultSet.getString("userid");
             String accentColour = resultSet.getString("accentColour");
             String language = resultSet.getString("language");
-            Array pointsGuildID = resultSet.getArray("pointsGuildID");
-            Array pointsMessages = resultSet.getArray("pointsMessages");
-            Array pointsVoiceChat = resultSet.getArray("pointsVoiceChat");
+            String[] pointsGuildID = (String[]) resultSet.getArray("pointsGuildID").getArray();
+            Integer[] pointsMessages = (Integer[]) resultSet.getArray("pointsMessages").getArray();
+            Integer[] pointsVoiceChat = (Integer[]) resultSet.getArray("pointsVoiceChat").getArray();
 
             return new User(
                     id,
@@ -89,15 +93,18 @@ public class PostgresUserDataAccessService implements UserDAO{
         String sql = "" +
                 "UPDATE \"user\" " +
                 "SET accentColour=?, " +
-                "language=? " +
+                "language=?, " +
+                "pointsGuildID=?, " +
+                "pointsMessages=?, " +
+                "pointsVoiceChat=? " +
                 "WHERE userID=?";
         return jdbcTemplate.update(sql,
                 user.getAccentColour(),
                 user.getLanguage(),
-                user.getUserID(),
                 user.getPointsGuildID(),
                 user.getPointsMessages(),
-                user.getPointsVoiceChat());
+                user.getPointsVoiceChat(),
+                user.getUserID());
     }
 
     @Override

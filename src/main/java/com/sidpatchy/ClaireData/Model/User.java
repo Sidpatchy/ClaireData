@@ -12,16 +12,16 @@ public class User {
     private final String userID;
     private final String accentColour;
     private final String language;
-    private final Array pointsGuildID;
-    private final Array pointsMessages;
-    private final Array pointsVoiceChat;
+    private final String[] pointsGuildID;
+    private final Integer[] pointsMessages;
+    private final Integer[] pointsVoiceChat;
 
     public User(@JsonProperty("userID") String userID,
                 @JsonProperty("accentColour") String accentColour,
                 @JsonProperty("language") String language,
-                @JsonProperty("pointsGuildID") Array pointsGuildID,
-                @JsonProperty("pointsMessages") Array pointsMessages,
-                @JsonProperty("pointsVoiceChat") Array pointsVoiceChat) {
+                @JsonProperty("pointsGuildID") String[] pointsGuildID,
+                @JsonProperty("pointsMessages") Integer[] pointsMessages,
+                @JsonProperty("pointsVoiceChat") Integer[] pointsVoiceChat) {
         this.userID = userID;
         this.accentColour = accentColour;
         this.language = language;
@@ -42,15 +42,15 @@ public class User {
         return language;
     }
 
-    public Array getPointsGuildID() {
+    public String[] getPointsGuildID() {
         return pointsGuildID;
     }
 
-    public Array getPointsMessages() {
+    public Integer[] getPointsMessages() {
         return pointsMessages;
     }
 
-    public Array getPointsVoiceChat() {
+    public Integer[] getPointsVoiceChat() {
         return pointsVoiceChat;
     }
 }
