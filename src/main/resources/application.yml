@@ -2,5 +2,17 @@ app:
   datasource:
     jdbc-url: jdbc:postgresql://127.0.0.1:5432/clairedb
     username: postgres
-    password: examplePassowrd
+    password: examplePassword
     pool-size: 30
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
