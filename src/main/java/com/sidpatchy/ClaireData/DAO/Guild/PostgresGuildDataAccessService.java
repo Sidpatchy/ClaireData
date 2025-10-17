@@ -25,50 +25,56 @@ public class PostgresGuildDataAccessService implements GuildDAO{
                 "guildID, " +
                 "requestsChannelID, " +
                 "moderatorMessagesChannelID, " +
-                "enforceServerLanguage) " +
-                "VALUES (?, ?, ?, ?)";
+                "enforceServerLanguage, " +
+                "locale) " +
+                "VALUES (?, ?, ?, ?, ?)";
         return jdbcTemplate.update(
                 sql,
                 guild.getGuildID(),
                 guild.getRequestsChannelId(),
                 guild.getModeratorMessagesChannelID(),
-                guild.isEnforceServerLanguage()
+                guild.isEnforceServerLanguage(),
+                guild.getLocale()
         );
     }
 
     @Override
     public List<Guild> selectAllGuilds() {
-        final String sql = "SELECT guildid, requestschannelid, moderatormessageschannelid, enforceServerLanguage FROM guild";
+        final String sql = "SELECT guildid, requestschannelid, moderatormessageschannelid, enforceServerLanguage, locale FROM guild";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             String guildID = resultSet.getString("guildid");
             String requestChannelID = resultSet.getString("requestschannelid");
             String moderatorMessageChannelID = resultSet.getString("moderatormessageschannelid");
             boolean enforceServerLanguage = resultSet.getBoolean("enforceServerLanguage");
+            String locale = resultSet.getString("locale");
 
             return new Guild(
                     guildID,
                     requestChannelID,
                     moderatorMessageChannelID,
-                    enforceServerLanguage
+                    enforceServerLanguage,
+                    locale
             );
         });
     }
 
     @Override
     public Optional<Guild> selectGuildByID(String guildID) {
-        final String sql = "SELECT guildid, requestschannelid, moderatormessageschannelid, enforceServerLanguage FROM guild WHERE guildid = ?";
+        final String sql = "SELECT guildid, requestschannelid, moderatormessageschannelid, enforceServerLanguage, locale FROM guild WHERE guildid = ?";
 
         Guild guild = jdbcTemplate.queryForObject(sql, new Object[]{guildID}, (resultSet, i) -> {
             String id = resultSet.getString("guildid");
             String requestChannelID = resultSet.getString("requestschannelid");
             String moderatorMessageChannelID = resultSet.getString("moderatormessageschannelid");
             boolean enforceServerLanguage = resultSet.getBoolean("enforceServerLanguage");
+            String locale = resultSet.getString("locale");
 
             return new Guild(
                     id,
                     requestChannelID,
                     moderatorMessageChannelID,
-                    enforceServerLanguage
+                    enforceServerLanguage,
+                    locale
             );
         });
         return Optional.ofNullable(guild);
@@ -80,12 +86,14 @@ public class PostgresGuildDataAccessService implements GuildDAO{
                 "UPDATE guild " +
                 "SET requestsChannelID=?, " +
                 "moderatorMessagesChannelID=?, " +
-                "enforceServerLanguage=? " +
+                "enforceServerLanguage=?, " +
+                "locale=? " +
                 "WHERE guildID=?";
         return jdbcTemplate.update(sql,
                 guild.getRequestsChannelId(),
                 guild.getModeratorMessagesChannelID(),
                 guild.isEnforceServerLanguage(),
+                guild.getLocale(),
                 guild.getGuildID());
     }
 

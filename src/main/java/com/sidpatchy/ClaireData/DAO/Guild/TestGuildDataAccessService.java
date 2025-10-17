@@ -14,7 +14,7 @@ public class TestGuildDataAccessService implements GuildDAO {
 
     @Override
     public int insertGuild(String guildID, Guild guild) {
-        db.add(new Guild(guildID, guild.getRequestsChannelId(), guild.getModeratorMessagesChannelID(), guild.isEnforceServerLanguage()));
+        db.add(new Guild(guildID, guild.getRequestsChannelId(), guild.getModeratorMessagesChannelID(), guild.isEnforceServerLanguage(), guild.getLocale()));
         return 1;
     }
 
@@ -46,7 +46,7 @@ public class TestGuildDataAccessService implements GuildDAO {
                 .map(g -> {
                     int indexOfGuildToUpdate = db.indexOf(g);
                     if (indexOfGuildToUpdate >= 0) {
-                        db.set(indexOfGuildToUpdate, new Guild(guildID, guild.getRequestsChannelId(), guild.getModeratorMessagesChannelID(), guild.isEnforceServerLanguage()));
+                        db.set(indexOfGuildToUpdate, new Guild(guildID, guild.getRequestsChannelId(), guild.getModeratorMessagesChannelID(), guild.isEnforceServerLanguage(), guild.getLocale()));
                         return 1;
                     }
                     return 0;
